@@ -15,26 +15,21 @@ public class User {
     Double money;
     List<ObjectShop> boughtObjects;
 
-    public User(){
-        this.userId = RandomId.getId();
-        this.money = 50.0;
-        this.boughtObjects = new LinkedList<>();
-    }
-
     public User(String userName, String userSurname, String birthDate, Credentials credentials){
-        this();
+        this.userId = RandomId.getId();
         this.userName = userName;
         this.userSurname = userSurname;
         this.birthDate = birthDate;
         this.credentials = credentials;
+        this.money = 50.0;
+        this.boughtObjects = new LinkedList<>();
     }
+
+    public User(){}
+
 
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -81,18 +76,12 @@ public class User {
         return boughtObjects;
     }
 
-    public void setBoughtObjects(List<ObjectShop> objects) {this.boughtObjects = objects;}
-
     public void addBoughtObject(ObjectShop object) {
         this.boughtObjects.add(object);
     }
 
     public Double getMoney() {
         return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
     }
 
     public void purchaseObject(ObjectShop object) throws NotEnoughMoneyException {

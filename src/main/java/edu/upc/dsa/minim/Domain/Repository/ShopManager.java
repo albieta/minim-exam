@@ -14,7 +14,7 @@ public interface ShopManager {
 
     public ObjectShop objectInfo(String objectId);
 
-    public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException;
+    public void addUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException;
 
     public List<User> getUsers();
 

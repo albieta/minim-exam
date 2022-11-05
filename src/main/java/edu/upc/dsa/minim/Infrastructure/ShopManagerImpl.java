@@ -47,7 +47,7 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
+    public void addUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
         if(!userExistsByCredentials(credentials).isNeither()){
             throw new UserAlreadyExistsException();
         }
