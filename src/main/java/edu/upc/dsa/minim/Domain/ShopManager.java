@@ -1,4 +1,4 @@
-package edu.upc.dsa.minim.Domain.Repository;
+package edu.upc.dsa.minim.Domain;
 
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.ObjectShop;

@@ -6,7 +6,7 @@ import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.EmailAddress;
 import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
-import edu.upc.dsa.minim.Domain.Repository.ShopManager;
+import edu.upc.dsa.minim.Domain.ShopManager;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

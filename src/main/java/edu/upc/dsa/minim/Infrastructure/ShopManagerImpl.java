@@ -5,7 +5,7 @@ import edu.upc.dsa.minim.Domain.Entity.ObjectShop;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.Tristate;
-import edu.upc.dsa.minim.Domain.Repository.ShopManager;
+import edu.upc.dsa.minim.Domain.ShopManager;
 import org.apache.log4j.Logger;
 
 import java.util.*;
