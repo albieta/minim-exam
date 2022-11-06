@@ -7,29 +7,35 @@ import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
 import java.util.*;
 
 public class User {
-    String userId;
-    String userName;
-    String userSurname;
-    String birthDate;
-    Credentials credentials;
-    Double money;
-    List<ObjectShop> boughtObjects;
+    private String userId;
+    private String userName;
+    private String userSurname;
+    private String birthDate;
+    private Credentials credentials;
+    private Double money;
 
-    public User(String userName, String userSurname, String birthDate, Credentials credentials){
+    private List<ObjectShop> boughtObjects;
+
+    public User(){
         this.userId = RandomId.getId();
-        this.userName = userName;
-        this.userSurname = userSurname;
-        this.birthDate = birthDate;
-        this.credentials = credentials;
         this.money = 50.0;
         this.boughtObjects = new LinkedList<>();
     }
 
-    public User(){}
-
+    public User(String userName, String userSurname, String birthDate, Credentials credentials){
+        this();
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.birthDate = birthDate;
+        this.credentials = credentials;
+    }
 
     public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -80,8 +86,16 @@ public class User {
         this.boughtObjects.add(object);
     }
 
+    public void setBoughtObjects(List<ObjectShop> boughtObjects) {
+        this.boughtObjects = boughtObjects;
+    }
+
     public Double getMoney() {
         return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
     }
 
     public void purchaseObject(ObjectShop object) throws NotEnoughMoneyException {

@@ -3,8 +3,8 @@ package edu.upc.dsa.minim.Domain.Entity.VO;
 import java.util.Objects;
 
 public class Credentials {
-    EmailAddress email;
-    String password;
+    private EmailAddress email;
+    private String password;
 
     public Credentials(){}
 

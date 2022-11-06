@@ -3,10 +3,10 @@ package edu.upc.dsa.minim.Domain.Entity;
 import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
 
 public class ObjectShop {
-    String objectId;
-    String objectName;
-    String description;
-    Double price;
+    private String objectId;
+    private String objectName;
+    private String description;
+    private Double price;
 
     public ObjectShop(){this.objectId = RandomId.getId();}
 
