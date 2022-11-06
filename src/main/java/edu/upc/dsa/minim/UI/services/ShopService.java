@@ -2,6 +2,8 @@ package edu.upc.dsa.minim.UI.services;
 
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.ObjectShop;
+import edu.upc.dsa.minim.Domain.Entity.TransferObjects.NewObject;
+import edu.upc.dsa.minim.Domain.Entity.TransferObjects.RegisterUser;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.EmailAddress;
@@ -41,17 +43,18 @@ public class ShopService {
     @POST
     @ApiOperation(value = "register a new user", notes = "Register User")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= User.class),
+            @ApiResponse(code = 201, message = "Successful", response= RegisterUser.class),
             @ApiResponse(code = 409, message = "Conflict, User already exists")
     })
     @Path("/user")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addUser(User user) {
+    public Response addUser(RegisterUser user) {
         try{
             this.shopManager.addUser(user.getUserName(), user.getUserSurname(), user.getBirthDate(), user.getCredentials());
         } catch (UserAlreadyExistsException e) {
             return Response.status(409).entity(user).build();
         }
+
         return Response.status(201).entity(user).build();
     }
 
@@ -95,11 +98,11 @@ public class ShopService {
     @POST
     @ApiOperation(value = "add a new Object", notes = "Add Object")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= ObjectShop.class)
+            @ApiResponse(code = 201, message = "Successful", response= NewObject.class)
     })
     @Path("/object")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addObject(ObjectShop object) {
+    public Response addObject(NewObject object) {
         this.shopManager.addObject(object.getObjectName(), object.getDescription(), object.getPrice());
         return Response.status(201).entity(object).build();
     }

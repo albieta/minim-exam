@@ -4,7 +4,6 @@ import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.ObjectShop;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
-import edu.upc.dsa.minim.Domain.Entity.VO.Tristate;
 import edu.upc.dsa.minim.Domain.ShopManager;
 import org.apache.log4j.Logger;
 
@@ -48,7 +47,7 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public void addUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
-        if(!userExistsByCredentials(credentials).isNeither()){
+        if(userExistsByCredentials(credentials)){
             throw new UserAlreadyExistsException();
         }
         User user = new User(name, surname, birthdate, credentials);
@@ -69,10 +68,12 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public void loginUser(Credentials credentials) throws UserCredentialsNotValidException {
-        if(!userExistsByCredentials(credentials).isTrue()){
+    public User loginUser(Credentials credentials) throws UserCredentialsNotValidException {
+        User user = getUserByCredentials(credentials);
+        if(user==null){
             throw new UserCredentialsNotValidException();
         }
+        return user;
     }
 
     @Override
@@ -113,21 +114,34 @@ public class ShopManagerImpl implements ShopManager {
         return objects.size();
     }
 
-    public Tristate userExistsByCredentials(Credentials credentials) {
+    public Boolean userExistsByCredentials(Credentials credentials) {
         for(User user : this.users.values()){
             if(user.hasEmail(credentials)){
-                return Tristate.fromBoolean(user.hasCredentials(credentials));
+                return true;
             }
         }
-        return Tristate.NEITHER;
+        return false;
+    }
+
+    public User getUserByCredentials(Credentials credentials) {
+        return this.users.values().stream()
+                .filter(x->x.getCredentials().isEqual(credentials))
+                .findFirst()
+                .orElse(null);
     }
 
     public ObjectShop getObject(String objectId) {
+        return this.objects.stream()
+                .filter(x->objectId.equals(x.getObjectId()))
+                .findFirst()
+                .orElse(null);
+        /*
         for (ObjectShop element : this.objects) {
             if(Objects.equals(element.getObjectId(), objectId)) {
                 return element;
             }
         }
         return null;
+         */
     }
 }

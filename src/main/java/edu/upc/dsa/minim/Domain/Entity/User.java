@@ -70,10 +70,6 @@ public class User {
         this.credentials = credentials;
     }
 
-    public Boolean hasCredentials(Credentials credentials){
-        return this.credentials.isEqual(credentials);
-    }
-
     public Boolean hasEmail(Credentials credentials) {
         return this.credentials.getEmail().isEqual(credentials.getEmail());
     }

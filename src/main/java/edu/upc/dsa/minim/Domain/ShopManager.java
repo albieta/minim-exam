@@ -18,7 +18,7 @@ public interface ShopManager {
 
     public List<User> getUsers();
 
-    public void loginUser(Credentials credentials) throws UserCredentialsNotValidException;
+    public User loginUser(Credentials credentials) throws UserCredentialsNotValidException;
 
     public void addObject(String objectName, String description, Double price);
 
