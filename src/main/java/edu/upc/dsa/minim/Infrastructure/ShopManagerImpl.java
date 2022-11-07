@@ -12,9 +12,9 @@ import java.util.*;
 public class ShopManagerImpl implements ShopManager {
     private static ShopManager instance;
 
-    List<ObjectShop> objects;
+    protected List<ObjectShop> objects;
 
-    Map<String, User> users;
+    protected Map<String, User> users;
 
     final static Logger logger = Logger.getLogger(ShopManagerImpl.class);
 
@@ -46,12 +46,13 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public void addUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
+    public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
         if(userExistsByCredentials(credentials)){
             throw new UserAlreadyExistsException();
         }
         User user = new User(name, surname, birthdate, credentials);
         this.users.put(user.getUserId(), user);
+        logger.info("User was registered!");
     }
 
     @Override

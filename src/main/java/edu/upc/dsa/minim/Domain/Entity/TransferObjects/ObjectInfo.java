@@ -1,15 +1,13 @@
 package edu.upc.dsa.minim.Domain.Entity.TransferObjects;
 
-import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
-
-public class NewObject {
+public class ObjectInfo {
     private String objectName;
     private String description;
     private Double price;
 
-    public NewObject(){}
+    public ObjectInfo(){}
 
-    public NewObject(String objectName, String description, Double price){
+    public ObjectInfo(String objectName, String description, Double price){
         this.objectName = objectName;
         this.description = description;
         this.price = price;

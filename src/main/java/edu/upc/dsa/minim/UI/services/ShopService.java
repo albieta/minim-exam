@@ -2,8 +2,8 @@ package edu.upc.dsa.minim.UI.services;
 
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.ObjectShop;
-import edu.upc.dsa.minim.Domain.Entity.TransferObjects.NewObject;
-import edu.upc.dsa.minim.Domain.Entity.TransferObjects.RegisterUser;
+import edu.upc.dsa.minim.Domain.Entity.TransferObjects.ObjectInfo;
+import edu.upc.dsa.minim.Domain.Entity.TransferObjects.UserInfo;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.EmailAddress;
@@ -26,11 +26,11 @@ public class ShopService {
         this.shopManager = ShopManagerImpl.getInstance();
         if (shopManager.size()==0) {
             Credentials credentials1 = new Credentials(new EmailAddress("albaromagomez@gmail.com"), "Test123");
-            this.shopManager.addUser("Alba", "Roma Gómez", "23/11/2001", credentials1);
+            this.shopManager.registerUser("Alba", "Roma Gómez", "23/11/2001", credentials1);
             Credentials credentials2 = new Credentials(new EmailAddress("susanagr@gmail.com"), "123test");
-            this.shopManager.addUser("Susana", "Roma Gómez", "19/5/1971", credentials2);
+            this.shopManager.registerUser("Susana", "Roma Gómez", "19/5/1971", credentials2);
             Credentials credentials3 = new Credentials(new EmailAddress("oriolplansponsa@gmail.com"), "123456");
-            this.shopManager.addUser("Oriol", "Plans Ponsa", "11/4/1997", credentials3);
+            this.shopManager.registerUser("Oriol", "Plans Ponsa", "11/4/1997", credentials3);
 
             this.shopManager.addObject("Pa Bimbo", "un pa molt bo", 2.3);
             this.shopManager.addObject("Talla ungles", "talla ungles per quan les tens llargues", 6.1);
@@ -43,14 +43,14 @@ public class ShopService {
     @POST
     @ApiOperation(value = "register a new user", notes = "Register User")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= RegisterUser.class),
+            @ApiResponse(code = 201, message = "Successful", response= UserInfo.class),
             @ApiResponse(code = 409, message = "Conflict, User already exists")
     })
     @Path("/user")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addUser(RegisterUser user) {
+    public Response registerUser(UserInfo user) {
         try{
-            this.shopManager.addUser(user.getUserName(), user.getUserSurname(), user.getBirthDate(), user.getCredentials());
+            this.shopManager.registerUser(user.getUserName(), user.getUserSurname(), user.getBirthDate(), user.getCredentials());
         } catch (UserAlreadyExistsException e) {
             return Response.status(409).entity(user).build();
         }
@@ -98,11 +98,11 @@ public class ShopService {
     @POST
     @ApiOperation(value = "add a new Object", notes = "Add Object")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= NewObject.class)
+            @ApiResponse(code = 201, message = "Successful", response= ObjectInfo.class)
     })
     @Path("/object")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addObject(NewObject object) {
+    public Response addObject(ObjectInfo object) {
         this.shopManager.addObject(object.getObjectName(), object.getDescription(), object.getPrice());
         return Response.status(201).entity(object).build();
     }

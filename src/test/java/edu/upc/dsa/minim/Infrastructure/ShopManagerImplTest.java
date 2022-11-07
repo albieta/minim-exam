@@ -22,11 +22,11 @@ public class ShopManagerImplTest {
         this.shopManager = new ShopManagerImpl();
 
         Credentials credentials1 = new Credentials(new EmailAddress("albaromagomez@gmail.com"), "Test123");
-        this.shopManager.addUser("Alba", "Roma Gómez", "23/11/2001", credentials1);
+        this.shopManager.registerUser("Alba", "Roma Gómez", "23/11/2001", credentials1);
         Credentials credentials2 = new Credentials(new EmailAddress("susanagr@gmail.com"), "123test");
-        this.shopManager.addUser("Susana", "Roma Gómez", "19/5/1971", credentials2);
+        this.shopManager.registerUser("Susana", "Roma Gómez", "19/5/1971", credentials2);
         Credentials credentials3 = new Credentials(new EmailAddress("oriolplansponsa@gmail.com"), "123456");
-        this.shopManager.addUser("Oriol", "Plans Ponsa", "11/4/1997", credentials3);
+        this.shopManager.registerUser("Oriol", "Plans Ponsa", "11/4/1997", credentials3);
 
         this.shopManager.addObject("Pa Bimbo", "un pa molt bo", 2.3);
         this.shopManager.addObject("Talla ungles", "talla ungles per quan les tens llargues", 6.1);
@@ -46,7 +46,7 @@ public class ShopManagerImplTest {
         Assert.assertEquals(5, this.shopManager.numObjects());
 
         Credentials credentials = new Credentials(new EmailAddress("blancaromagomez@gmail.com"), "Test123");
-        this.shopManager.addUser("Blanca", "Roma Gómez", "23/11/2000", credentials);
+        this.shopManager.registerUser("Blanca", "Roma Gómez", "23/11/2000", credentials);
 
         Assert.assertEquals(4, this.shopManager.numUsers());
     }
@@ -60,7 +60,7 @@ public class ShopManagerImplTest {
     public void test_register_user_that_already_exists_throws_exception() throws EmailAddressNotValidException {
         Credentials credentials = new Credentials(new EmailAddress("albaromagomez@gmail.com"), "Test123");
 
-        Assert.assertThrows(UserAlreadyExistsException.class, ()->this.shopManager.addUser("Blanca", "Roma Gómez", "23/11/2000", credentials));
+        Assert.assertThrows(UserAlreadyExistsException.class, ()->this.shopManager.registerUser("Blanca", "Roma Gómez", "23/11/2000", credentials));
     }
 
     @Test
