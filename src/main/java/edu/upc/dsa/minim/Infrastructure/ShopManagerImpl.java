@@ -47,16 +47,19 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
+        logger.info("Trying register of user with information: ("+name+", "+surname+", "+birthdate+", {credentials})");
         if(userExistsByCredentials(credentials)){
+            logger.warn("Register not possible, User already exists! :(");
             throw new UserAlreadyExistsException();
         }
         User user = new User(name, surname, birthdate, credentials);
         this.users.put(user.getUserId(), user);
-        logger.info("User was registered!");
+        logger.info("Register of user: "+user+" was done!");
     }
 
     @Override
     public List<User> getUsers() {
+        logger.info("User list was requested, proceeding to obtain it.");
         List<User> users = new ArrayList<>(this.users.values());
         users.sort((User u1, User u2)->{
             int value = u1.getUserSurname().compareToIgnoreCase(u2.getUserSurname());
@@ -65,43 +68,57 @@ public class ShopManagerImpl implements ShopManager {
             }
             return value;
         });
+        logger.info("User list was correctly found! :)");
         return users;
     }
 
     @Override
     public User loginUser(Credentials credentials) throws UserCredentialsNotValidException {
+        logger.info("Login of user with email ("+credentials.getEmail()+" was requested.");
         User user = getUserByCredentials(credentials);
         if(user==null){
+            logger.warn("User credentials are not valid! :(");
             throw new UserCredentialsNotValidException();
         }
+        logger.info("User login was correctly done with email ("+credentials.getEmail()+")! :)");
         return user;
     }
 
     @Override
     public void addObject(String objectName, String description, Double price) {
+        logger.info("Proceeding to add object with information ("+objectName+", "+description+", "+price+")");
         objects.add(new ObjectShop(objectName, description, price));
+        logger.info("Object was correctly added");
     }
 
     @Override
     public List<ObjectShop> objectsByPrice() {
+        logger.info("Object list was requested.");
         this.objects.sort((ObjectShop o1, ObjectShop o2)->Double.compare(o2.getPrice(),o1.getPrice()));
+        logger.info("Object list was correctly found :)");
         return this.objects;
     }
 
     @Override
     public void objectPurchase(String userId, String objectId) throws UserDoesNotExistException, ObjectDoesNotExistException, NotEnoughMoneyException {
+        logger.info("Purchase of object with id: "+objectId+" was requested from user with id: "+userId+".");
         if(!this.users.containsKey(userId)){
+            logger.warn("User with id: "+userId+" does not exist");
             throw new UserDoesNotExistException();
         }
         ObjectShop object;
         if((object = getObject(objectId)) == null) {
+            logger.warn("Object with id: "+objectId+" does not exist");
             throw new ObjectDoesNotExistException();
         }
         this.users.get(userId).purchaseObject(object);
+        logger.info("Purchase was correctly effectuated");
     }
 
     @Override
     public List<ObjectShop> objectsByUser(String userId) {
+        logger.info("Request of purchased objects form user with id: "+userId+".");
+        logger.info("Request was correctly effectuated");
         return this.users.get(userId).getBoughtObjects();
     }
 
@@ -136,13 +153,5 @@ public class ShopManagerImpl implements ShopManager {
                 .filter(x->objectId.equals(x.getObjectId()))
                 .findFirst()
                 .orElse(null);
-        /*
-        for (ObjectShop element : this.objects) {
-            if(Objects.equals(element.getObjectId(), objectId)) {
-                return element;
-            }
-        }
-        return null;
-         */
     }
 }
