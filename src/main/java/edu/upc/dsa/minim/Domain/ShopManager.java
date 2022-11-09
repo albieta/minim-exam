@@ -26,7 +26,7 @@ public interface ShopManager {
 
     public void objectPurchase(String userId, String objectId) throws UserDoesNotExistException, ObjectDoesNotExistException, NotEnoughMoneyException;
 
-    public List<ObjectShop> objectsByUser(String userId);
+    public List<ObjectShop> objectsByUser(String userId) throws UserDoesNotExistException;
 
     public int numUsers();
 

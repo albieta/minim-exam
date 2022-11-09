@@ -1,4 +1,4 @@
-package edu.upc.dsa.minim.Domain.Entity.TransferObjects;
+package edu.upc.dsa.minim.Domain.Entity.TO;
 
 public class ObjectInfo {
     private String objectName;

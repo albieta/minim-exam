@@ -21,7 +21,10 @@ public class EmailAddress {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws EmailAddressNotValidException {
+        if(!EmailValidator.getInstance().isValid(email)) {
+            throw new EmailAddressNotValidException();
+        }
         this.email = email;
     }
 

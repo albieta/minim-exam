@@ -1,16 +1,16 @@
-package edu.upc.dsa.minim.Domain.Entity.TransferObjects;
+package edu.upc.dsa.minim.Domain.Entity.TO;
 
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 
-public class UserInfo {
+public class UserRegister {
     private String userName;
     private String userSurname;
     private String birthDate;
     private Credentials credentials;
 
-    public UserInfo(){}
+    public UserRegister(){}
 
-    public UserInfo(String userName, String userSurname, String birthDate, Credentials credentials){
+    public UserRegister(String userName, String userSurname, String birthDate, Credentials credentials){
         this.userName = userName;
         this.userSurname = userSurname;
         this.birthDate = birthDate;

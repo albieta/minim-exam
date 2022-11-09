@@ -2,8 +2,10 @@ package edu.upc.dsa.minim.UI.services;
 
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.ObjectShop;
-import edu.upc.dsa.minim.Domain.Entity.TransferObjects.ObjectInfo;
-import edu.upc.dsa.minim.Domain.Entity.TransferObjects.UserInfo;
+import edu.upc.dsa.minim.Domain.Entity.TO.ObjectInfo;
+import edu.upc.dsa.minim.Domain.Entity.TO.TransferMethods.UserTransfer;
+import edu.upc.dsa.minim.Domain.Entity.TO.UserInfo;
+import edu.upc.dsa.minim.Domain.Entity.TO.UserRegister;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.EmailAddress;
@@ -16,6 +18,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
+
 
 @Api(value = "/shop", description = "Endpoint to Shop Service")
 @Path("/shop")
@@ -43,12 +47,12 @@ public class ShopService {
     @POST
     @ApiOperation(value = "register a new user", notes = "Register User")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= UserInfo.class),
+            @ApiResponse(code = 201, message = "Successful", response= UserRegister.class),
             @ApiResponse(code = 409, message = "Conflict, User already exists")
     })
     @Path("/user")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response registerUser(UserInfo user) {
+    public Response registerUser(UserRegister user) {
         try{
             this.shopManager.registerUser(user.getUserName(), user.getUserSurname(), user.getBirthDate(), user.getCredentials());
         } catch (UserAlreadyExistsException e) {
@@ -61,7 +65,7 @@ public class ShopService {
     @POST
     @ApiOperation(value = "login of a user", notes = "Login User")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 401, message = "Unauthorized, Invalid credentials")
     })
     @Path("/user/login")
@@ -110,21 +114,21 @@ public class ShopService {
     @GET
     @ApiOperation(value = "get users ordered by surname and name", notes = "Get Users")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = User.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = UserInfo.class, responseContainer="List"),
     })
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsersOrdered() {
         List<User> users = this.shopManager.getUsers();
 
-        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
-        return Response.status(201).entity(entity).build();
+        GenericEntity<List<UserInfo>> entity = new GenericEntity<List<UserInfo>>(UserTransfer.userInfoList(users)) {};
+        return Response.status(200).entity(entity).build();
     }
 
     @GET
     @ApiOperation(value = "get objects ordered by price", notes = "Get Objects")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = ObjectShop.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = ObjectShop.class, responseContainer="List"),
     })
     @Path("/objects")
     @Produces(MediaType.APPLICATION_JSON)
@@ -132,20 +136,24 @@ public class ShopService {
         List<ObjectShop> objects = this.shopManager.objectsByPrice();
 
         GenericEntity<List<ObjectShop>> entity = new GenericEntity<List<ObjectShop>>(objects) {};
-        return Response.status(201).entity(entity).build();
+        return Response.status(200).entity(entity).build();
     }
 
     @GET
     @ApiOperation(value = "get objects purchased by user", notes = "Get Orders By User")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = ObjectShop.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = ObjectShop.class, responseContainer="List"),
+            @ApiResponse(code = 400, message = "User does not exist")
     })
     @Path("/object/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response objectsByUser(@PathParam("userId") String userId) {
-        List<ObjectShop> objects = this.shopManager.objectsByUser(userId);
-
-        GenericEntity<List<ObjectShop>> entity = new GenericEntity<List<ObjectShop>>(objects) {};
-        return Response.status(201).entity(entity).build();
+        try{
+            List<ObjectShop> objects = this.shopManager.objectsByUser(userId);
+            GenericEntity<List<ObjectShop>> entity = new GenericEntity<List<ObjectShop>>(objects) {};
+            return Response.status(200).entity(entity).build();
+        } catch (UserDoesNotExistException e) {
+            return Response.status(400).build();
+        }
     }
 }

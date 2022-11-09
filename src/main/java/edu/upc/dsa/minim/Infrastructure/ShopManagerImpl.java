@@ -116,10 +116,15 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public List<ObjectShop> objectsByUser(String userId) {
+    public List<ObjectShop> objectsByUser(String userId) throws UserDoesNotExistException {
         logger.info("Request of purchased objects form user with id: "+userId+".");
+        User user = this.users.get(userId);
+        if (user == null){
+            logger.warn("User with id: "+userId+" does not exist");
+            throw new UserDoesNotExistException();
+        }
         logger.info("Request was correctly effectuated");
-        return this.users.get(userId).getBoughtObjects();
+        return user.getBoughtObjects();
     }
 
     @Override
