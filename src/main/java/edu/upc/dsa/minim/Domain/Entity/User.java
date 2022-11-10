@@ -1,108 +1,102 @@
 package edu.upc.dsa.minim.Domain.Entity;
 
-import edu.upc.dsa.minim.Domain.Entity.Exceptions.EmailAddressNotValidException;
-import edu.upc.dsa.minim.Domain.Entity.Exceptions.NotEnoughMoneyException;
-import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
-import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
+import edu.upc.dsa.minim.Domain.Entity.Exceptions.AlreadyActiveActivityException;
+import edu.upc.dsa.minim.Domain.Entity.Exceptions.NoGameActiveException;
+import edu.upc.dsa.minim.Domain.Entity.VO.*;
 
 import java.util.*;
 
 public class User {
-    private String userId;
-    private String userName;
-    private String userSurname;
-    private String birthDate;
-    private Credentials credentials;
-    private Double money;
-
-    private List<ObjectShop> boughtObjects;
+    private String userIdName;
+    private int points;
+    private int level;
+    private Game currentGame;
+    private Map<String, List<LevelInfo>> gamesPlayed;
 
     public User(){
-        this.userId = RandomId.getId();
-        this.money = 50.0;
-        this.boughtObjects = new LinkedList<>();
+        this.gamesPlayed = new HashMap<>();
     }
 
-    public User(String userName, String userSurname, String birthDate, Credentials credentials) throws EmailAddressNotValidException {
+    public User(String userIdName) {
         this();
-        this.userName = userName;
-        this.userSurname = userSurname;
-        this.birthDate = birthDate;
-        if(credentials.getEmail().isValid()){
-            this.credentials = credentials;
+        this.userIdName = userIdName;
+        this.points = 0;
+    }
+
+    public String getUserIdName() {
+        return userIdName;
+    }
+
+    public void setUserIdName(String userIdName) {
+        this.userIdName = userIdName;
+    }
+
+    public int getPoints() throws NoGameActiveException {
+        if(this.currentGame == null){
+            throw new NoGameActiveException();
+        }
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public Game getCurrentGame() throws NoGameActiveException {
+        if(this.currentGame == null){
+            throw new NoGameActiveException();
+        }
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
+
+    public Map<String, List<LevelInfo>> getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(Map<String, List<LevelInfo>> gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void startGame(Game game) throws AlreadyActiveActivityException {
+        if(currentGame!=null){
+            throw new AlreadyActiveActivityException();
+        }
+        this.currentGame = game;
+        this.level = 1;
+        this.points = 50;
+    }
+
+    public void passLevel(int points, String date) throws NoGameActiveException {
+        if(this.currentGame == null){
+            throw new NoGameActiveException();
+        }
+        int maxLevel = this.currentGame.getNumLevels();
+        if (this.level==1){
+            this.gamesPlayed.put(currentGame.getGameId(), new ArrayList<>());
+        }
+        List<LevelInfo> list = this.gamesPlayed.get(currentGame.getGameId());
+        list.add(new LevelInfo(this.level, points, date));
+        this.gamesPlayed.put(currentGame.getGameId(), list);
+        this.level = this.level + 1;
+        this.points = this.points + points;
+        if(this.level==maxLevel){
+            this.currentGame = null;
         }
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserSurname() {
-        return userSurname;
-    }
-
-    public void setUserSurname(String userSurname) {
-        this.userSurname = userSurname;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Credentials getCredentials() {
-        return credentials;
-    }
-
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
-    }
-
-    public Boolean hasEmail(Credentials credentials) {
-        return this.credentials.getEmail().isEqual(credentials.getEmail());
-    }
-
-    public List<ObjectShop> getBoughtObjects() {
-        return boughtObjects;
-    }
-
-    public void addBoughtObject(ObjectShop object) {
-        this.boughtObjects.add(object);
-    }
-
-    public void setBoughtObjects(List<ObjectShop> boughtObjects) {
-        this.boughtObjects = boughtObjects;
-    }
-
-    public Double getMoney() {
-        return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
-    }
-
-    public void purchaseObject(ObjectShop object) throws NotEnoughMoneyException {
-        if(object.getPrice()>this.money){
-            throw new NotEnoughMoneyException();
-        }
-
-        this.money = this.money - object.getPrice();
-        boughtObjects.add(object);
+    public void endGame() {
+        this.currentGame = null;
     }
 }
