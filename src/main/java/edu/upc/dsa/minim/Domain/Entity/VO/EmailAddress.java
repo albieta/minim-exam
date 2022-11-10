@@ -11,10 +11,8 @@ public class EmailAddress {
     public EmailAddress(){}
 
     public EmailAddress(String email) throws EmailAddressNotValidException {
-        if(!EmailValidator.getInstance().isValid(email)) {
-            throw new EmailAddressNotValidException();
-        }
         this.email = email;
+        this.isValid();
     }
 
     public String getEmail() {
@@ -22,13 +20,18 @@ public class EmailAddress {
     }
 
     public void setEmail(String email) throws EmailAddressNotValidException {
-        if(!EmailValidator.getInstance().isValid(email)) {
-            throw new EmailAddressNotValidException();
-        }
         this.email = email;
+        this.isValid();
     }
 
     public boolean isEqual(EmailAddress emailAddress) {
         return (Objects.equals(email, emailAddress.getEmail()));
+    }
+
+    public Boolean isValid() throws EmailAddressNotValidException {
+        if(!EmailValidator.getInstance().isValid(email)) {
+            throw new EmailAddressNotValidException();
+        }
+        return true;
     }
 }

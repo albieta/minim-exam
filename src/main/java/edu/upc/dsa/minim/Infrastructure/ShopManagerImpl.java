@@ -46,7 +46,7 @@ public class ShopManagerImpl implements ShopManager {
     }
 
     @Override
-    public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException {
+    public void registerUser(String name, String surname, String birthdate, Credentials credentials) throws UserAlreadyExistsException, EmailAddressNotValidException {
         logger.info("Trying register of user with information: ("+name+", "+surname+", "+birthdate+", {credentials})");
         if(userExistsByCredentials(credentials)){
             logger.warn("Register not possible, User already exists! :(");

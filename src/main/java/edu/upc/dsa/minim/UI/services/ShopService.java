@@ -48,7 +48,8 @@ public class ShopService {
     @ApiOperation(value = "register a new user", notes = "Register User")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response= UserRegister.class),
-            @ApiResponse(code = 409, message = "Conflict, User already exists")
+            @ApiResponse(code = 409, message = "Conflict, User already exists"),
+            @ApiResponse(code = 400, message = "Incorrect")
     })
     @Path("/user")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -57,8 +58,9 @@ public class ShopService {
             this.shopManager.registerUser(user.getUserName(), user.getUserSurname(), user.getBirthDate(), user.getCredentials());
         } catch (UserAlreadyExistsException e) {
             return Response.status(409).entity(user).build();
+        } catch (EmailAddressNotValidException e) {
+            return Response.status(400).entity(user).build();
         }
-
         return Response.status(201).entity(user).build();
     }
 

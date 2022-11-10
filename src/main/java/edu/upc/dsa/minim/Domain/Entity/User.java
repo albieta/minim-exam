@@ -1,5 +1,6 @@
 package edu.upc.dsa.minim.Domain.Entity;
 
+import edu.upc.dsa.minim.Domain.Entity.Exceptions.EmailAddressNotValidException;
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.NotEnoughMoneyException;
 import edu.upc.dsa.minim.Domain.Entity.VO.Credentials;
 import edu.upc.dsa.minim.Domain.Entity.VO.RandomId;
@@ -22,12 +23,14 @@ public class User {
         this.boughtObjects = new LinkedList<>();
     }
 
-    public User(String userName, String userSurname, String birthDate, Credentials credentials){
+    public User(String userName, String userSurname, String birthDate, Credentials credentials) throws EmailAddressNotValidException {
         this();
         this.userName = userName;
         this.userSurname = userSurname;
         this.birthDate = birthDate;
-        this.credentials = credentials;
+        if(credentials.getEmail().isValid()){
+            this.credentials = credentials;
+        }
     }
 
     public String getUserId() {
