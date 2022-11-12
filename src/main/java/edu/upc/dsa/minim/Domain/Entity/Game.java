@@ -1,19 +1,11 @@
 package edu.upc.dsa.minim.Domain.Entity;
 
-import edu.upc.dsa.minim.Domain.Entity.Exceptions.NoGameActiveException;
-import edu.upc.dsa.minim.Domain.Entity.VO.UserHistory;
-
-import java.util.*;
-
 public class Game {
     private String gameId;
     private String description;
     private int numLevels;
-    private List<UserHistory> usersHistory;
 
-    public Game(){
-        this.usersHistory = new LinkedList<>();
-    }
+    public Game(){}
 
     public Game( String gameId, String description, int numLevels){
         this();
@@ -44,21 +36,5 @@ public class Game {
 
     public void setNumLevels(int numLevels) {
         this.numLevels = numLevels;
-    }
-
-    public List<UserHistory> getUsersHistory() {
-        return usersHistory;
-    }
-
-    public void setUsersHistory(List<UserHistory> usersHistory) {
-        this.usersHistory = usersHistory;
-    }
-
-    public void sort() {
-        this.usersHistory.sort((UserHistory p1, UserHistory p2)->(p1.getPoints() - p2.getPoints()));
-    }
-
-    public void addUserHistory(User user) throws NoGameActiveException {
-        this.usersHistory.add(new UserHistory(user.getUserIdName(),user.getPoints()));
     }
 }
