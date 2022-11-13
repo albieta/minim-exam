@@ -2,7 +2,7 @@ package edu.upc.dsa.minim.Infrastructure;
 
 import edu.upc.dsa.minim.Domain.Entity.Exceptions.*;
 import edu.upc.dsa.minim.Domain.Entity.Game;
-import edu.upc.dsa.minim.Domain.Entity.GamePlay;
+import edu.upc.dsa.minim.Domain.Entity.Play;
 import edu.upc.dsa.minim.Domain.Entity.User;
 import edu.upc.dsa.minim.Domain.Entity.VO.CurrentGame;
 import edu.upc.dsa.minim.Domain.Entity.VO.LevelInfo;
@@ -73,7 +73,7 @@ public class GameManagerImpl implements GameManager {
         User user = getUser(userIdName);
         isUserNull(user);
         logger.info("OK");
-        CurrentGame currentGame = new CurrentGame(user.getCurrentGame().getGameId(),user.getLevel());
+        CurrentGame currentGame = new CurrentGame(user.getCurrentGame(),user.getLevel());
         logger.info("Current level is: "+currentGame);
         return currentGame;
     }
@@ -121,7 +121,7 @@ public class GameManagerImpl implements GameManager {
         User user = getUser(userIdName);
         isUserNull(user);
         List<Game> gamesPlayed = new ArrayList<>();
-        for(String gamePlayed : user.getGamesPlayed().keySet()){
+        for(String gamePlayed : user.getPlays().keySet()){
             gamesPlayed.add(getGame(gamePlayed));
         }
         logger.info("Games of User were correctly obtained!");
@@ -135,7 +135,7 @@ public class GameManagerImpl implements GameManager {
         User user = getUser(userIdName);
         isGameNull(game);
         isUserNull(user);
-        GamePlay gamePlayed = getUser(userIdName).hasPlayedGame(gameId);
+        Play gamePlayed = getUser(userIdName).hasPlayedGame(gameId);
         if(gamePlayed==null){
             return new ArrayList<>();
         }

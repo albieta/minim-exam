@@ -7,13 +7,13 @@ import java.util.*;
 
 public class User {
     private String userIdName;
-    private Boolean activeGame;
-    private String mostRecentGame;
-    private Map<String, GamePlay> gamesPlayed;
+    private Boolean active;
+    private String mostRecentPlay;
+    private Map<String, Play> plays;
 
     public User(){
-        this.activeGame = false;
-        this.gamesPlayed = new HashMap<>();
+        this.active = false;
+        this.plays = new HashMap<>();
     }
 
     public User(String userIdName) {
@@ -29,31 +29,31 @@ public class User {
         this.userIdName = userIdName;
     }
 
-    public Boolean getActiveGame() {
-        return activeGame;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setActiveGame(Boolean activeGame) {
-        this.activeGame = activeGame;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
-    public Map<String, GamePlay> getGamesPlayed() {
-        return gamesPlayed;
+    public Map<String, Play> getPlays() {
+        return plays;
     }
 
-    public void setGamesPlayed(Map<String, GamePlay> gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
+    public void setPlays(Map<String, Play> plays) {
+        this.plays = plays;
     }
 
     public int getPoints() throws NoGameActiveException {
-        if(!this.activeGame){
+        if(!this.active){
             throw new NoGameActiveException();
         }
         return currentGamePlay().getPoints();
     }
 
-    public Game getCurrentGame() throws NoGameActiveException {
-        if(!this.activeGame){
+    public String getCurrentGame() throws NoGameActiveException {
+        if(!this.active){
             throw new NoGameActiveException();
         }
         return currentGamePlay().getGame();
@@ -64,32 +64,32 @@ public class User {
     }
 
     public void startGame(Game game) throws AlreadyActiveActivityException {
-        if(this.activeGame){
+        if(this.active){
             throw new AlreadyActiveActivityException();
         }
-        this.gamesPlayed.put(game.getGameId(), new GamePlay(game));
-        this.mostRecentGame = game.getGameId();
-        this.activeGame = true;
+        this.plays.put(game.getGameId(), new Play(game));
+        this.mostRecentPlay = game.getGameId();
+        this.active = true;
     }
 
     public void passLevel(int points, String date) throws NoGameActiveException {
-        if(!this.activeGame){
+        if(!this.active){
             throw new NoGameActiveException();
         }
         if(currentGamePlay().passLevel(points, date)){
-            this.activeGame = false;
+            this.active = false;
         }
     }
 
     public void endGame() {
-        this.activeGame = false;
+        this.active = false;
     }
 
-    public GamePlay currentGamePlay() {
-        return this.gamesPlayed.get(this.mostRecentGame);
+    public Play currentGamePlay() {
+        return this.plays.get(this.mostRecentPlay);
     }
 
-    public GamePlay hasPlayedGame(String gameId) {
-        return this.gamesPlayed.get(gameId);
+    public Play hasPlayedGame(String gameId) {
+        return this.plays.get(gameId);
     }
 }

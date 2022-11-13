@@ -101,7 +101,7 @@ public class GameManagerImplTest {
         this.gameManager.startGame("Maria", "2A");
         int initialPoints2 = this.gameManager.currentPoints("Maria");
         this.gameManager.passLevel("Maria", 5, "11/12/2022");
-        int afterPoints2 = this.gameManager.usersOrderedByPoints("2A").get(0).getGamesPlayed().get("2A").getPoints();
+        int afterPoints2 = this.gameManager.usersOrderedByPoints("2A").get(0).getPlays().get("2A").getPoints();
         Assert.assertEquals(50, initialPoints2);
         Assert.assertEquals(155, afterPoints2);
     }
